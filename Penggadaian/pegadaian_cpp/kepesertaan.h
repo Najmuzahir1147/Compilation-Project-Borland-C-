@@ -1,0 +1,263 @@
+/*
+  Pembuat    : Devi Rodiana, S.T.
+  Nis	       : 2022123456
+  Email      : idevroedi@gmail.com
+  Kontak     : 083256894
+  Pembimbing : ........................
+  Diajukan   : Tugas Akhir Dasar Pemrograman PPLG
+  user,password (idev,manggacobian)
+*/
+#include "garisbatas.h"
+#include "pengajuan.h"
+
+typedef struct datapeserta
+{
+	int kodepeserta;
+   char nama[100];
+   char tempat_lahir[100];
+   char tgl_lahir[100];
+   char jenis_kelamin[100];
+   char alamat[100];
+   char tlp[100];
+} datapeserta;
+
+tampilpeserta(){
+	ifstream baca; // membaca
+   int xdy=8;
+	datapeserta dpst;
+	baca.open("peserta.db", ios::binary);
+    int j1,j2,j3,j4,j5,j6,j7,jak;
+   	  j1=1;j2=9;j3=17;j4=17;j5=18;j6=18;j7=11;jak=12;
+    head("DATA KEPESERTAAN");
+    		while(baca.read((char *) &dpst, sizeof(dpst)))
+    		{
+         	if(j3-3<strlen(dpst.nama)){
+            	j3=strlen(dpst.nama)+3;
+            }
+            if(j4-3<strlen(dpst.tempat_lahir)){
+            	j4=strlen(dpst.tempat_lahir)+3;
+            }
+            if(j5-3<strlen(dpst.tgl_lahir)){
+            	j5=strlen(dpst.tgl_lahir)+3;
+            }
+            if(j6-3<strlen(dpst.jenis_kelamin)){
+            	j6=strlen(dpst.jenis_kelamin)+3;
+            }
+            if(j7-3<strlen(dpst.alamat)){
+            	j7=strlen(dpst.alamat)+3;
+            }
+            if(jak-3<strlen(dpst.tlp)){
+            	jak=strlen(dpst.tlp)+3;
+            }
+    		}
+    		baca.close();
+         j2=j2+j1;
+         j3=j3+j2;
+         j4=j4+j3;
+         j5=j5+j4;
+         j6=j6+j5;
+         j7=j7+j6;
+         jak=jak+j7;
+   	garis(jak);
+         gotoxy(j1,wherey());cout<<"| Kode ";
+   		gotoxy(j2,wherey());cout<<"| Nama Peserta";
+         gotoxy(j3,wherey());cout<<"| Tempat Lahir";
+         gotoxy(j4,wherey());cout<<"| Tanggal Lahir";
+         gotoxy(j5,wherey());cout<<"| Jenis Kelamin";
+         gotoxy(j6,wherey());cout<<"| Alamat";
+         gotoxy(j7,wherey());cout<<"| No Telp";
+         gotoxy(jak,wherey());cout<<" |";
+         cout<<endl;
+      garis(jak);
+         int j=1;
+         baca.open("peserta.db", ios::binary);
+ 	  		while(baca.read((char *) &dpst, sizeof(dpst)))
+         {
+         		gotoxy(j1,wherey());cout<<"| "<<dpst.kodepeserta;
+   				gotoxy(j2,wherey());cout<<"| "<<dpst.nama;
+               gotoxy(j3,wherey());cout<<"| "<<dpst.tempat_lahir;
+   				gotoxy(j4,wherey());cout<<"| "<<dpst.tgl_lahir;
+               gotoxy(j5,wherey());cout<<"| "<<dpst.jenis_kelamin;
+               gotoxy(j6,wherey());cout<<"| "<<dpst.alamat;
+               gotoxy(j7,wherey());cout<<"| "<<dpst.tlp;
+               gotoxy(jak,wherey());cout<<" |";
+   				cout<<endl;
+      			xdy++;
+               j++;
+         }
+         baca.close();
+         if(j==1){
+            gotoxy(1,wherey());cout<<"\t\t\t\t\tData Masih Kosong"<<endl;
+         }
+         garis(jak);cout<<endl;
+}
+
+jumlahpeserta(){
+	ifstream baca; // membaca
+   datapeserta dpst;
+	baca.open("peserta.db", ios::binary);
+   int j=1;
+		while(baca.read((char *) &dpst, sizeof(dpst)))
+      {
+      	j++;
+      }
+      baca.close();
+      return j;
+}
+
+
+inputpeserta(){
+	datapeserta dpst;
+   ofstream tulis; // menulis
+	tulis.open("peserta.db", ios::binary | ios::app);
+   	cout<<"Input Peserta Pegadaian Syariah"<<endl;
+   	cout<<"Kode Peserta  : "<<jumlahpeserta()<<" (auto)"<<endl;
+      dpst.kodepeserta=jumlahpeserta();
+      cout<<"Nama Peserta  : ";gets(dpst.nama);
+   	cout<<"Tempat Lahir  : ";gets(dpst.tempat_lahir);
+   	cout<<"Tanggal Lahir : ";gets(dpst.tgl_lahir);
+   	cout<<"Jenis Kelamin : ";gets(dpst.jenis_kelamin);
+   	cout<<"Alamat        : ";gets(dpst.alamat);
+   	cout<<"No Telp       : ";gets(dpst.tlp);
+   	tulis.write((char *) &dpst, sizeof(dpst)); // menulis ke file
+    	tulis.close();
+}
+
+editpeserta(int kp){
+   ofstream tulis; // menulis
+   ifstream baca; // membaca
+   datapeserta dpst;
+      	baca.open("peserta.db", ios::binary);
+
+ 			tulis.open("tmp.db", ios::out|ios::binary);
+
+      	int ketemu = 0;
+
+ 			while(baca.read((char*) &dpst, sizeof(dpst))){
+  				if(dpst.kodepeserta != kp){
+   				tulis.write((char*)&dpst, sizeof(dpst));
+  				}else{
+            	if(ketemu == 0){
+            	ketemu=1;
+               cout<<"edit Peserta Pegadaian Syariah ::Kode Peserta: <<"<<kp<<">> ::"<<endl;
+      			cout<<"Nama Peserta  : ";gets(dpst.nama);
+   				cout<<"Tempat Lahir  : ";gets(dpst.tempat_lahir);
+   				cout<<"Tanggal Lahir : ";gets(dpst.tgl_lahir);
+   				cout<<"Jenis Kelamin : ";gets(dpst.jenis_kelamin);
+   				cout<<"Alamat        : ";gets(dpst.alamat);
+   				cout<<"No Telp       : ";gets(dpst.tlp);
+   				tulis.write((char *) &dpst, sizeof(dpst));
+               }
+  				}
+ 			}
+ 			baca.close();
+ 			tulis.close();
+
+ 			remove("peserta.db");
+ 			rename("tmp.db", "peserta.db");
+         if (ketemu ==1) {
+  				cout<<"Edit Berhasil";
+ 			}else{
+  				cout<<"Edit gagal";
+ 			}
+         getch();
+}
+
+char *cekpeserta(int kp){
+   ifstream baca; // membaca
+   datapeserta dpst;
+      	baca.open("peserta.db", ios::binary);
+
+			char ketemu[50] = "kosong";
+
+ 			while(baca.read((char*) &dpst, sizeof(dpst))){
+  				if(dpst.kodepeserta == kp){
+               strcpy(ketemu,dpst.nama);
+  				}
+ 			}
+ 			baca.close();
+
+ 			return ketemu;
+}
+
+ hapus(int kp){
+ datapeserta nilai;
+ ifstream fi;
+ fi.open("peserta.db", ios::binary);
+
+ ofstream fo;
+ fo.open("tmp.dat", ios::out|ios::binary);
+
+ int ketemu = 0;
+
+  	while(fi.read((char*) &nilai, sizeof(nilai))){
+  if(nilai.kodepeserta != kp){
+   fo.write((char*)&nilai, sizeof(nilai));
+   }
+  else{
+   ketemu = 1;
+  }
+  }
+ fi.close();
+ fo.close();
+
+ remove("peserta.db");
+ rename("tmp.dat", "peserta.db");
+
+}
+
+peserta(){
+   char kp[5],pilih_menu,notif[50]="";
+   menu:
+   clrscr();
+   tampilpeserta();
+   cout<<notif;
+   strcpy(notif,"");
+   cout<<"Menu Kepesertaan"<<endl;
+   cout<<"1. Input Data Kepesertaan"<<endl;
+   cout<<"2. Edit Data Kepesertaan"<<endl;
+   cout<<"3. Lihat Data Pengajuan Gadai"<<endl;
+   cout<<"4. Hapus Data Pengajuan Gadai"<<endl;
+   cout<<"5. Print Data Pengajuan Gadai"<<endl;
+   cout<<"0. Kembali"<<endl;
+   cout<<"Menu pilihan anda adalah : ";cin>>pilih_menu;
+   if(pilih_menu=='0'){
+      clrscr();
+   }else if(pilih_menu=='1'){
+   	clrscr();
+   	tampilpeserta();
+   	inputpeserta();
+      cout<<"Data Peserta telah tersimpan!!!";getch();
+      goto menu;
+  	}else if(pilih_menu=='2'){
+   	cout<<"Masukan Kode Peserta yang ingin diubah : ";cin>>kp;
+      clrscr();
+   	tampilpeserta();
+   	editpeserta(atoi(kp));
+      goto menu;
+  	}else if(pilih_menu=='3'){
+      cout<<"Masukan Kode Peserta : ";cin>>kp;
+		if(strcmp(cekpeserta(atoi(kp)),"kosong")!=0){
+         char n[200]="";
+         strcpy(n,cekpeserta(atoi(kp)));
+         pengajuangadai(kp,n);
+         goto menu;
+      }else{
+      	cout<<"data tidak ditemukan!!";
+         getch();
+         goto menu;
+      } /*else if(pilih_menu=='4'){
+   	cout<<"Masukan Kode Peserta yang ingin diubah : ";cin>>kp;
+      clrscr();
+   	tampilpeserta();
+   	hapuspeserta(atoi(kp));
+      goto menu;  */
+  	}else{
+       cout<<"Masukan Kode Peserta yang ingin diubah : ";cin>>kp;
+      clrscr();
+   	tampilpeserta();
+   	hapus(atoi(kp));
+      goto menu;
+   }
+
+}

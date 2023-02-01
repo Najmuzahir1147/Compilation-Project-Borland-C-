@@ -1,0 +1,3 @@
+| Kode | Nama Peserta| Tempat Lahir| Tanggal Lahir| Jenis Kelamin| Alamat| No Telp |
+| 3| rikfi| kakak| 234| cimas| kodda| dwa |
+| 2| gustian nouvantyar| brebes| 1945| kepoo| mana weh| 12345 |
